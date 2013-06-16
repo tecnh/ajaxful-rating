@@ -78,7 +78,7 @@ module AjaxfulRating # :nodoc:
     #     # some page update here ...
     #   end
     def rate(stars, user, dimension = nil)
-      return false if (stars.to_i > self.class.max_stars) || (stars.to_i < 1)
+      return false if (stars.to_i > self.class.max_stars(dimension)) || (stars.to_i < 1)
       raise Errors::AlreadyRatedError if (!self.class.axr_config(dimension)[:allow_update] && rated_by?(user, dimension))
 
       rate = if self.class.axr_config(dimension)[:allow_update] && rated_by?(user, dimension)
