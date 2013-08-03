@@ -8,10 +8,10 @@ Gem::Specification.new do |s|
   s.version = "3.0.0.beta8"
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Edgar J. Suarez", "Denis Odorcic"]
-  s.date = "2012-01-07"
+  s.authors = ["Mat Ellis", "Jack Chu", "Edgar J. Suarez", "Denis Odorcic"]
+  s.date = "2013-08-03"
   s.description = "Provides a simple way to add rating functionality to your application."
-  s.email = ["edgar.js@gmail.com", "denis.odorcic@gmail.com"]
+  s.email = ["mat@tecnh.com", "jack@jackchu.com", "edgar.js@gmail.com", "denis.odorcic@gmail.com"]
   s.extra_rdoc_files = [
     "README.textile"
   ]
@@ -46,9 +46,9 @@ Gem::Specification.new do |s|
     "test/lib/model_test.rb",
     "test/test_helper.rb"
   ]
-  s.homepage = "http://github.com/edgarjs/ajaxful-rating"
+  s.homepage = "http://github.com/tecnh/ajaxful-rating"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.10"
+  s.rubygems_version = "3.0"
   s.summary = "Provides a simple way to add rating functionality to your application."
 
   if s.respond_to? :specification_version then
