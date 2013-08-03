@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
     "lib/generators/ajaxful_rating/ajaxful_rating_generator.rb",
     "lib/generators/ajaxful_rating/templates/images/star.png",
     "lib/generators/ajaxful_rating/templates/images/star_small.png",
+    "lib/generators/ajaxful_rating/templates/images/star_medium.png",
     "lib/generators/ajaxful_rating/templates/migration.rb",
     "lib/generators/ajaxful_rating/templates/model.rb",
     "lib/generators/ajaxful_rating/templates/style.css",

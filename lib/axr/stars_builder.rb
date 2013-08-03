@@ -1,15 +1,15 @@
 module AjaxfulRating # :nodoc:
   class StarsBuilder # :nodoc:
     include AjaxfulRating::Locale
-    
-    attr_reader :rateable, :user, :options, :remote_options
-    
-    def initialize(rateable, user_or_static, template, css_builder, options = {}, remote_options = {})
+
+    attr_reader :rateable, :user, :options
+
+    def initialize(rateable, user_or_static, template, css_builder, options = {})
       @user = user_or_static unless user_or_static == :static
       @rateable, @template, @css_builder = rateable, template, css_builder
-      apply_stars_builder_options!(options, remote_options)
+      apply_stars_builder_options!(options)
     end
-    
+
     def show_value
       if options[:show_user_rating]
         rate = rateable.rate_by(user, options[:dimension]) if user
@@ -18,42 +18,39 @@ module AjaxfulRating # :nodoc:
         rateable.rate_average(true, options[:dimension])
       end
     end
-    
+
     def render
       options[:wrap] ? wrapper_tag : ratings_tag
     end
-    
+
     private
-    
-    def apply_stars_builder_options!(options, remote_options)
+
+    def apply_stars_builder_options!(options)
       @options = {
+        :url => nil,
+        :method => :post,
         :wrap => true,
         :small => false,
         :show_user_rating => false,
         :force_static => false,
         :current_user => (@template.current_user if @template.respond_to?(:current_user))
       }.merge(options)
-      
+
       @options[:small] = @options[:small].to_s == 'true'
       @options[:show_user_rating] = @options[:show_user_rating].to_s == 'true'
       @options[:wrap] = @options[:wrap].to_s == 'true'
-      
-      @remote_options = {
-        :url => nil,
-        :method => :post
-      }.merge(remote_options)
-      
-      if @remote_options[:url].nil?
+
+      if @options[:url].nil?
         rateable_name = ActionController::RecordIdentifier.dom_class(rateable)
         url = "rate_#{rateable_name}_path"
         if @template.respond_to?(url)
-          @remote_options[:url] = @template.send(url, rateable)
+          @options[:url] = @template.send(url, rateable)
         else
           raise(Errors::MissingRateRoute)
         end
       end
     end
-    
+
     def ratings_tag
       stars = []
       width = (show_value / rateable.class.max_stars.to_f) * 100
@@ -61,7 +58,7 @@ module AjaxfulRating # :nodoc:
       @css_builder.rule('.ajaxful-rating', :width => (rateable.class.max_stars * 25))
       @css_builder.rule('.ajaxful-rating.small',
         :width => (rateable.class.max_stars * 10)) if options[:small]
-      
+
       stars << @template.content_tag(:li, i18n(:current), :class => "show-value",
         :style => "width: #{width}%")
       stars += (1..rateable.class.max_stars).map do |i|
@@ -69,7 +66,7 @@ module AjaxfulRating # :nodoc:
       end
       @template.content_tag(:ul, stars.join.html_safe, :class => "ajaxful-rating#{' small' if options[:small]}")
     end
-    
+
     def star_tag(value)
       already_rated = rateable.rated_by?(user, options[:dimension]) if user && !rateable.axr_config(options[:dimension])[:allow_update]
       css_class = "stars-#{value}"
@@ -88,23 +85,24 @@ module AjaxfulRating # :nodoc:
     end
 
     def link_star_tag(value, css_class)
-      query = {
-        :stars => value,
-        :dimension => options[:dimension],
-        :small => options[:small],
-        :show_user_rating => options[:show_user_rating]
-      }.to_query
-      
+      html = {
+        :"data-method" => options[:method],
+        :"data-stars" => value,
+        :"data-dimension" => options[:dimension],
+        :"data-small" => options[:small],
+        :"data-show_user_rating" => options[:show_user_rating],
+        :class => css_class,
+        :title => i18n(:hover, value)
+      }
+
       options = {
         :class => css_class,
         :title => i18n(:hover, value),
-        :method => remote_options[:method] || :post,
+        :method => options[:method] || :post,
         :remote => true
       }
-      
-      href = "#{remote_options[:url]}?#{query}"
 
-      @template.link_to(value, href, options)
+      @template.link_to(value, options[:url], options)
     end
 
     def wrapper_tag

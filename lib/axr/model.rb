@@ -33,7 +33,7 @@ module AjaxfulRating # :nodoc:
             :cache_column => :rating_average
           }
         end
-        
+
         alias_method :ajaxful_rating_options, :axr_config
       end
 
@@ -44,12 +44,12 @@ module AjaxfulRating # :nodoc:
           has_many "#{dimension}_raters", :through => "#{dimension}_rates", :source => :rater
 
           axr_config(dimension).update(options)
-        end 
+        end
       else
           axr_config.update(options)
       end
-      
-      
+
+
       include AjaxfulRating::InstanceMethods
       extend AjaxfulRating::SingletonMethods
     end
@@ -62,7 +62,7 @@ module AjaxfulRating # :nodoc:
 
   # Instance methods for the rateable object.
   module InstanceMethods
-    
+
     # Proxy for axr_config singleton method.
     def axr_config(dimension = nil)
       self.class.axr_config(dimension)
@@ -93,7 +93,7 @@ module AjaxfulRating # :nodoc:
       rate.save!
       self.update_cached_average(dimension)
     end
-    
+
     # Builds the DOM id attribute for the wrapper in view.
     def wrapper_dom_id(options = {})
       options = options.to_hash.symbolize_keys.slice(:small, :dimension)
@@ -106,7 +106,9 @@ module AjaxfulRating # :nodoc:
       end
       options = options.delete_if { |x| x.empty? }
       prefix = "ajaxful_rating"
-      prefix << "_#{options.sort.join('_')}" unless options.empty?
+      options.sort.each do |o|
+        prefix << "_#{o}" unless o.empty?
+      end
       ApplicationController.helpers.dom_id(self, prefix)
     end
 
@@ -117,13 +119,13 @@ module AjaxfulRating # :nodoc:
     def raters(dimension = nil)
       sql = "SELECT DISTINCT u.* FROM #{self.class.user_class.table_name} u "\
         "INNER JOIN rates r ON u.id = r.rater_id WHERE "
-      
+
       sql << self.class.send(:sanitize_sql_for_conditions, {
         :rateable_id => id,
         :rateable_type => self.class.base_class.name,
         :dimension => (dimension.to_s if dimension)
       }, 'r')
-      
+
       self.class.user_class.find_by_sql(sql)
     end
 
@@ -139,7 +141,7 @@ module AjaxfulRating # :nodoc:
     def rated_by?(user, dimension = nil)
       !rate_by(user, dimension).nil?
     end
-    
+
     # Returns whether or not the user can rate this object.
     # Based on if the user has already rated the object or the
     # :allow_update option is enabled.
@@ -195,7 +197,7 @@ module AjaxfulRating # :nodoc:
   end
 
   module SingletonMethods
-    
+
     # Maximum value accepted when rating the model. Default is 5.
     #
     # Change it by passing the :stars option to +ajaxful_rateable+
@@ -209,7 +211,7 @@ module AjaxfulRating # :nodoc:
     def user_class_name
       Rate.reflect_on_association(:rater).options[:class_name]
     end
-    
+
     # Gets the user's class
     def user_class
       user_class_name.constantize
@@ -239,13 +241,13 @@ module AjaxfulRating # :nodoc:
     def find_statement(attr_name, attr_value, dimension = nil)
       sql = "SELECT DISTINCT r2.* FROM rates r1 INNER JOIN "\
         "#{self.base_class.table_name} r2 ON r1.rateable_id = r2.id WHERE "
-      
+
       sql << sanitize_sql_for_conditions({
         :rateable_type => self.base_class.name,
         attr_name => attr_value,
         :dimension => (dimension.to_s if dimension)
       }, 'r1')
-      
+
       find_by_sql(sql)
     end
 
