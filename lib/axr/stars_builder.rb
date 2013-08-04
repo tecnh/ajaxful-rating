@@ -64,7 +64,7 @@ module AjaxfulRating # :nodoc:
         star_tag(i)
       end
       # When using rails_xss plugin, it needs to render as HTML
-      @template.content_tag(:ul, stars.join.try(:html_safe), :class => "ajaxful-rating#{options[:size].to_s}")
+      @template.content_tag(:ul, stars.join.try(:html_safe), :class => "ajaxful-rating #{options[:size].to_s}")
     end
 
     def star_tag(value)
