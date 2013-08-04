@@ -93,6 +93,7 @@ module AjaxfulRating # :nodoc:
 
     def link_star_tag(value, css_class)
       html = {
+        :"data-url" => options[:url],
         :"data-method" => options[:method],
         :"data-stars" => value,
         :"data-dimension" => options[:dimension],
@@ -109,7 +110,7 @@ module AjaxfulRating # :nodoc:
         :remote => true
       }
 
-      @template.link_to(value, options[:url], options)
+      @template.link_to(value, "#", html)
     end
 
     def wrapper_tag
