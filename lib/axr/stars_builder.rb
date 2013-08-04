@@ -52,11 +52,11 @@ module AjaxfulRating # :nodoc:
 
     def ratings_tag
       stars = []
-      width = (show_value / rateable.class.max_stars.to_f) * 100
+      li_width = (show_value / rateable.class.max_stars.to_f) * 100
       li_class = "axr-#{show_value}-#{rateable.class.max_stars}".gsub('.', '_')
       # Has to happen dynamically to allow for different number of stars
       # Remember to change 10, 18 & 25 to match the width of your images if you change them
-      width = case options[:size]
+      css_width = case options[:size]
       when :small
         (rateable.class.max_stars * 10)
       when :medium
@@ -64,11 +64,11 @@ module AjaxfulRating # :nodoc:
       else
         (rateable.class.max_stars * 25)
       end
-      @css_builder.rule('.ajaxful-rating', :width => width)
-      @css_builder.rule(".ajaxful-rating.#{options[:size].to_s}", :width => width) if options[:size]
+      @css_builder.rule('.ajaxful-rating', :width => css_width)
+      @css_builder.rule(".ajaxful-rating.#{options[:size].to_s}", :width => css_width) if options[:size]
 
       stars << @template.content_tag(:li, i18n(:current), :class => "show-value",
-        :style => "width: #{width}%")
+        :style => "width: #{li_width}%")
       stars += (1..rateable.class.max_stars).map do |i|
         star_tag(i)
       end
