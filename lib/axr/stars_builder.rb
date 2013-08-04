@@ -105,7 +105,7 @@ module AjaxfulRating # :nodoc:
       options = {
         :class => css_class,
         :title => i18n(:hover, value),
-        :method => options[:method] || :post,
+        :method => :post,
         :remote => true
       }
 
