@@ -55,23 +55,16 @@ module AjaxfulRating # :nodoc:
       width = (show_value / rateable.class.max_stars.to_f) * 100
       li_class = "axr-#{show_value}-#{rateable.class.max_stars}".gsub('.', '_')
       @css_builder.rule('.ajaxful-rating', :width => (rateable.class.max_stars * 25))
-      @css_builder.rule('.ajaxful-rating.medium',
-        :width => (rateable.class.max_stars * 10)) if options[:size] == 'medium'
-      @css_builder.rule('.ajaxful-rating.small',
-        :width => (rateable.class.max_stars * 10)) if options[:size] == 'small'
+      @css_builder.rule(".ajaxful-rating.#{options[:size].to_s}",
+        :width => (rateable.class.max_stars * 10)) if options[:size]
 
       stars << @template.content_tag(:li, i18n(:current), :class => "show-value",
         :style => "width: #{width}%")
       stars += (1..rateable.class.max_stars).map do |i|
         star_tag(i)
       end
-      if options[:size] == 'small'
-        size = ' small'
-      elsif options[:size] == 'medium'
-        size = ' medium'
-      end
       # When using rails_xss plugin, it needs to render as HTML
-      @template.content_tag(:ul, stars.join.try(:html_safe), :class => "ajaxful-rating#{size}")
+      @template.content_tag(:ul, stars.join.try(:html_safe), :class => "ajaxful-rating#{options[:size].to_s}")
     end
 
     def star_tag(value)
@@ -97,7 +90,7 @@ module AjaxfulRating # :nodoc:
         :"data-method" => options[:method],
         :"data-stars" => value,
         :"data-dimension" => options[:dimension],
-        :"data-size" => options[:size],
+        :"data-size" => options[:size].to_s,
         :"data-show_user_rating" => options[:show_user_rating],
         :class => css_class,
         :title => i18n(:hover, value)

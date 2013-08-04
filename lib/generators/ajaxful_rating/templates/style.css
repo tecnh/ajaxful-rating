@@ -41,7 +41,7 @@
 
 /* This section is generated dynamically.
 Just add a call to the helper method 'ajaxful_rating_style' within
-the head tags in your main layout 
+the head tags in your main layout
 .ajaxful-rating .stars-1{
 width: 20%;
 z-index: 6;
@@ -68,6 +68,11 @@ z-index: 2;
     background-position: left center;
 }
 
+/* small star = 10x10 */
+/* medium star = 18x18 */
+/* large star = 25x25 */
+/* spacing is calculated dynamically */
+
 /* smaller star */
 .ajaxful-rating.small{
     /*width: 50px; this is setted dynamically */
@@ -81,4 +86,19 @@ z-index: 2;
     background-image: image-url("ajaxful_rating/star_small.png");
     line-height: 10px;
     height: 10px;
+}
+
+/* smaller star */
+.ajaxful-rating.medium{
+    /*width: 40px; this is setted dynamically */
+    height: 18px;
+}
+.ajaxful-rating.medium,
+.ajaxful-rating.medium a:hover,
+.ajaxful-rating.medium a:active,
+.ajaxful-rating.medium a:focus,
+.ajaxful-rating.medium .show-value{
+    background-image: image-url("ajaxful_rating/star_medium.png");
+    line-height: 18px;
+    height: 18px;
 }
