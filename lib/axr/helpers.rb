@@ -45,6 +45,7 @@ module AjaxfulRating # :nodoc:
                  $('#' + response.id + ' .show-value').css('width', response.width + '%');
                }
             });
+            return false;
           });
         }
 
