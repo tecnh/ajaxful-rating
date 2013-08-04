@@ -9,7 +9,7 @@ generators/ajaxful_rating/templates/images/star_small.png
 generators/ajaxful_rating/templates/images/star_medium.png
 generators/ajaxful_rating/templates/migration.rb
 generators/ajaxful_rating/templates/model.rb
-generators/ajaxful_rating/templates/style.css
+generators/ajaxful_rating/templates/style.scss
 init.rb
 lib/ajaxful_rating.rb
 lib/axr/css_builder.rb

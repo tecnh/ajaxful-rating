@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
     "lib/generators/ajaxful_rating/templates/images/star_medium.png",
     "lib/generators/ajaxful_rating/templates/migration.rb",
     "lib/generators/ajaxful_rating/templates/model.rb",
-    "lib/generators/ajaxful_rating/templates/style.css",
+    "lib/generators/ajaxful_rating/templates/style.scss",
     "test/fixtures/car.rb",
     "test/fixtures/cars.yml",
     "test/fixtures/rate.rb",
