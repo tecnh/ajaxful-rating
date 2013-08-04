@@ -18,7 +18,7 @@ module AjaxfulRating # :nodoc:
 
           // Always send the authenticity_token with ajax
           $(document).ajaxSend(function(event, request, settings) {
-            if ( settings.type == 'post' ) {
+            if ( settings.type == 'POST' ) {
               settings.data = (settings.data ? settings.data + "&" : "")
                 + encodeURIComponent( csrf_param ) + "=" + encodeURIComponent( csrf_token );
             }
